@@ -7,8 +7,13 @@ html(lang="en")
         link(rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css")
     body 
         header
-            h1 Check!
+            h1 Clon-oom!
         main
-            h2 Good!
-            button Call
+            form#nick
+                input(type="text" placeholder="choose a nickname", required)
+                button Save 
+            ul
+            form#message
+                input(type="text" placeholder="Write a message", required)
+                button Send 
         script(src="/public/js/app.js") 

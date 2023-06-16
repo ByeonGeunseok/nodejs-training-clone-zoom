@@ -14,6 +14,7 @@ let muted = false;
 let cameraOff = false;
 let roomName;
 let myPeerConnection;
+let myDataChannel;
 
 async function getCameras() {
   try {
@@ -114,6 +115,9 @@ welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 
 // Socket Code
 socket.on("welcome", async () => {
+  myDataChannel = myPeerConnection.createDataChannel("chat");
+  myDataChannel.addEventListener("message", console.log);
+  console.log("made data channel");
   const offer = await myPeerConnection.createOffer();
   myPeerConnection.setLocalDescription(offer);
   console.log("sent the offer.");
@@ -121,6 +125,10 @@ socket.on("welcome", async () => {
 });
 
 socket.on("offer", async (offer) => {
+  myPeerConnection.addEventListener("datachannel", (event) => {
+    myDataChannel = event.channel;
+    myDataChannel.addEventListener("message", console.log);
+  });
   console.log("received the offer.");
   myPeerConnection.setRemoteDescription(offer);
   const answer = await myPeerConnection.createAnswer();
@@ -146,11 +154,11 @@ function makeConnection() {
       {
         urls: [
           // google stun server. only use for develop.
-          // "stun:stun.l.google.com:19302",
-          // "stun:stun1.l.google.com:19302",
-          // "stun:stun2.l.google.com:19302",
-          // "stun:stun3.l.google.com:19302",
-          // "stun:stun4.l.google.com:19302",
+          "stun:stun.l.google.com:19302",
+          "stun:stun1.l.google.com:19302",
+          "stun:stun2.l.google.com:19302",
+          "stun:stun3.l.google.com:19302",
+          "stun:stun4.l.google.com:19302",
         ],
       },
     ],
